@@ -1,73 +1,104 @@
-import "./Navbar.css";
-import theme_pattern from "../../assets/theme_pattern.svg";
-import { useRef, useState } from "react";
-import underline from "../../assets/nav_underline.svg";
-import AnchorLink from "react-anchor-link-smooth-scroll";
-import menu_open from "../../assets/menu_open.svg";
-import menu_close from "../../assets/menu_close.svg";
+import { useState, useEffect } from "react";
+import './Navbar.css'
 
 const Navbar = () => {
-  const [menu, setMenu] = useState("home");
-  const menuRef = useRef();
+  const [activeSection, setActiveSection] = useState("home");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  const openMenu = () => {
-    menuRef.current.style.right = "0";
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  const closeMenu = () => {
-    menuRef.current.style.right = "-350px";
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : 'auto';
+  }, [isMobileMenuOpen]);
+
+  const navLinks = [
+    { id: "home", label: "Home" },
+    { id: "about", label: "About" },
+    { id: "services", label: "Services" },
+    { id: "work", label: "Portfolio" },
+    { id: "contact", label: "Contact" }
+  ];
+
+  const handleLinkClick = (id) => {
+    setActiveSection(id);
+    setIsMobileMenuOpen(false);
   };
 
   return (
-    <div className="navbar">
-      <div className="navbar-title">
-        <h1>Yash</h1>
-        <img src={theme_pattern} alt="Theme Pattern" />
+    <>
+      <nav className={`navbar-main ${isScrolled ? 'scrolled' : ''}`}>
+        <div className="navbar-content">
+          <div className="logo-section">
+            <div className="logo-icon">Y</div>
+            <div className="logo-text">Yash</div>
+          </div>
+
+          <ul className="desktop-nav">
+            {navLinks.map((link) => (
+              <li key={link.id}>
+                <a
+                  href={`#${link.id}`}
+                  className={`nav-link ${activeSection === link.id ? 'active' : ''}`}
+                  onClick={() => setActiveSection(link.id)}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <button className="cta-button" onClick={() => window.location.href = '#contact'}>
+            Connect Now
+          </button>
+
+          <div
+            className={`mobile-toggle ${isMobileMenuOpen ? 'active' : ''}`}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <div className="toggle-bar"></div>
+            <div className="toggle-bar"></div>
+            <div className="toggle-bar"></div>
+          </div>
+        </div>
+      </nav>
+
+      <div
+        className={`mobile-backdrop ${isMobileMenuOpen ? 'active' : ''}`}
+        onClick={() => setIsMobileMenuOpen(false)}
+      />
+
+      <div className={`mobile-nav ${isMobileMenuOpen ? 'active' : ''}`}>
+        <ul className="mobile-nav-list">
+          {navLinks.map((link) => (
+            <li key={link.id} className="mobile-nav-item">
+              <a
+                href={`#${link.id}`}
+                className={`mobile-nav-link ${activeSection === link.id ? 'active' : ''}`}
+                onClick={() => handleLinkClick(link.id)}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <button
+          className="mobile-cta"
+          onClick={() => {
+            setIsMobileMenuOpen(false);
+            window.location.href = '#contact';
+          }}
+        >
+          Connect Now →
+        </button>
       </div>
-      <img src={menu_open} onClick={openMenu} alt="Menu Open" className="nav-mob-open" />
-      <ul ref={menuRef} className="nav-menu">
-        <img src={menu_close} onClick={closeMenu} alt="" className="nav-mob-close" />
-        <li>
-          <AnchorLink className="anchor-link" offset={50} href="#home">
-            <p onClick={() => setMenu("home")}>Home</p>
-          </AnchorLink>
-          {menu === "home" ? <img src={underline} alt="underline" /> : <></>}
-        </li>
-        <li>
-          <AnchorLink className="anchor-link" offset={50} href="#about">
-            <p onClick={() => setMenu("about")}>About</p>
-          </AnchorLink>
-          {menu === "about" ? <img src={underline} alt="underline" /> : <></>}
-        </li>
-        <li>
-          <AnchorLink className="anchor-link" offset={50} href="#services">
-            <p onClick={() => setMenu("services")}>Services</p>
-          </AnchorLink>
-          {menu === "services" ? (
-            <img src={underline} alt="underline" />
-          ) : (
-            <></>
-          )}
-        </li>
-        <li>
-          <AnchorLink className="anchor-link" offset={50} href="#work">
-            <p onClick={() => setMenu("work")}>Portfolio</p>
-          </AnchorLink>
-          {menu === "work" ? <img src={underline} alt="underline" /> : <></>}
-        </li>
-        <li>
-          <AnchorLink className="anchor-link" offset={50} href="#contact">
-            <p onClick={() => setMenu("contact")}>Contact</p>
-          </AnchorLink>
-          {menu === "contact" ? <img src={underline} alt="underline" /> : <></>}
-        </li>
-      </ul>
-      <div className="nav-connect">
-        <AnchorLink className="anchor-link" offset={50} href="#contact">
-          Connect With Me
-        </AnchorLink>
-      </div>
-    </div>
+    </>
   );
 };
 

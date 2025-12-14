@@ -1,3 +1,4 @@
+/* Base styles matching Hero section */
 .mywork {
   display: flex;
   flex-direction: column;
@@ -5,16 +6,87 @@
   justify-content: center;
   gap: 80px;
   margin: 80px 170px;
+  padding: 60px;
+  border-radius: 30px;
+  position: relative;
+  overflow: hidden;
+  background: transparent;
 }
 
+/* Animated background effects matching Hero */
+.mywork::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.15), transparent);
+  border-radius: 50%;
+  top: -200px;
+  right: -200px;
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.mywork::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.15), transparent);
+  border-radius: 50%;
+  bottom: -150px;
+  left: -150px;
+  animation: pulse 4s ease-in-out infinite 2s;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+/* Title animations */
 .mywork-title {
   position: relative;
+  opacity: 0;
+  transform: translateY(-30px);
+  z-index: 1;
+}
+
+.mywork-title.animate-fade-in {
+  animation: fadeInDown 0.8s ease-out forwards;
+}
+
+@keyframes fadeInDown {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .mywork-title h1 {
   padding: 0px 30px;
   font-size: 80px;
-  font-weight: 600;
+  font-weight: 700;
+  background: linear-gradient(135deg, #00d4ff 0%, #0099ff 50%, #667eea 100%);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientFlow 3s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0%, 100% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
 }
 
 .mywork-title img {
@@ -22,73 +94,221 @@
   bottom: 0;
   right: 0;
   z-index: -1;
+  animation: floatImage 3s ease-in-out infinite;
 }
 
+@keyframes floatImage {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(2deg);
+  }
+}
+
+/* Work container */
 .mywork-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 40px;
+  z-index: 1;
 }
 
 .mywork-container img {
   box-sizing: border-box;
-  width: 419px;
+  width: 100%;
   height: 280px;
-  transition: 0.3s;
+  border-radius: 20px;
+  border: 3px solid rgba(0, 212, 255, 0.3);
   cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 25px rgba(0, 212, 255, 0.2);
+  object-fit: cover;
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated overlay on images */
+.mywork-container img::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
+  transition: left 0.6s ease;
+}
+
+.mywork-container.animate-container img {
+  animation: fadeInImage 0.6s ease-out forwards;
+}
+
+@keyframes fadeInImage {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .mywork-container img:hover {
-  transform: scale(1.1);
-  border: 4px solid #1a3d63;
-  border-radius: 10px;
-  transition: 0.3s;
+  transform: scale(1.05) translateY(-10px);
+  border: 3px solid #00d4ff;
+  box-shadow: 0 15px 50px rgba(0, 212, 255, 0.5),
+              0 0 40px rgba(0, 212, 255, 0.3);
 }
 
+/* Show More Button - matching Hero button style */
 .mywork-showmore {
   display: flex;
   gap: 15px;
+  align-items: center;
   border-radius: 50px;
-  border: 2px solid #ffffff;
-  padding: 30px 60px;
+  border: 2px solid rgba(0, 212, 255, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 25px 45px;
   font-size: 22px;
-  font-weight: 500;
-  margin-bottom: 80px;
-  transition: 0.6s;
+  font-weight: 600;
+  margin-bottom: 50px;
   cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 25px rgba(0, 212, 255, 0.2);
+  z-index: 1;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.mywork-showmore.animate-fade-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Shimmer effect on button */
+.mywork-showmore::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.mywork-showmore:hover::before {
+  left: 100%;
+}
+
+.mywork-showmore p {
+  color: #00d4ff;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+.mywork-showmore img {
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.5));
 }
 
 .mywork-showmore:hover {
-  gap: 30px;
-  transition: 0.6s;
+  gap: 25px;
+  transform: translateY(-3px) scale(1.02);
+  background: rgba(0, 212, 255, 0.1);
+  box-shadow: 0 10px 40px rgba(0, 212, 255, 0.4);
+  border-color: #00d4ff;
 }
+
+.mywork-showmore:hover img {
+  transform: translateX(5px);
+  filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.8));
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .mywork {
+    margin: 60px 80px;
+    gap: 60px;
+    padding: 50px 30px;
+  }
+
+  .mywork-title h1 {
+    font-size: 60px;
+  }
+
+  .mywork-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 35px;
+  }
+
+  .mywork-container img {
+    height: 250px;
+  }
+}
+
 @media (max-width: 768px) {
   .mywork {
     gap: 50px;
-    margin: 50px 70px;
+    margin: 30px 20px;
+    padding: 40px 20px;
     align-items: start;
   }
+
   .mywork-title h1 {
     padding: 0;
-    font-size: 50px;
-    font-weight: 600;
+    font-size: 48px;
   }
+
   .mywork-title img {
     width: 130px;
-    margin-right: -20px;
+    right: -20px;
   }
+
   .mywork-container {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 30px;
   }
+
   .mywork-container img {
     width: 100%;
-    height: 100%;
+    height: 220px;
   }
+
   .mywork-showmore {
     padding: 20px 40px;
     font-size: 18px;
-    margin: 50px auto;
-    cursor: pointer;
+    margin: 20px auto 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mywork {
+    margin: 20px 15px;
+    padding: 30px 15px;
+    gap: 40px;
+  }
+
+  .mywork-title h1 {
+    font-size: 36px;
+  }
+
+  .mywork-container img {
+    height: 180px;
+    border-radius: 15px;
+  }
+
+  .mywork-showmore {
+    padding: 18px 35px;
+    font-size: 16px;
   }
 }
